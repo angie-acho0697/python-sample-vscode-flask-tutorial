@@ -1,2 +1,10 @@
-from flask import Flask  # Import the Flask class
-app = Flask(__name__)    # Create an instance of the class for our use
+import flask
+import dash
+import dash_core_components as dcc
+import dash_bootstrap_components as dbc
+import dash_html_components as html
+from dash.dependencies import Input, Output
+import pandas as pd
+
+server = flask.Flask(__name__)
+app = dash.Dash(__name__, server=server)
