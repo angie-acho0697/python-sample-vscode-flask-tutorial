@@ -2,27 +2,48 @@ from datetime import datetime
 from flask import Flask, render_template
 from . import app
 
-@app.route("/")
-def home():
-    return render_template("home.html")
 
-@app.route("/about/")
-def about():
-    return render_template("about.html")
+colors = {
+    'background': '#111111',
+    'text': '#7FDBFF'
+}
 
-@app.route("/contact/")
-def contact():
-    return render_template("contact.html")
+data = pd.read_csv('claim.csv')
 
-@app.route("/hello/")
-@app.route("/hello/<name>")
-def hello_there(name = None):
-    return render_template(
-        "hello_there.html",
-        name=name,
-        date=datetime.now()
-    )
+names = list(data.columns)
 
-@app.route("/api/data")
-def get_data():
-    return app.send_static_file("data.json")
+app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+
+    html.H1(
+        children='Claims Assessor App',
+        style={
+            'textAlign': 'center',
+            'color': colors['text']
+        }
+    ),
+
+    html.Div(children='View Risk rating for each Feature', style={
+        'textAlign': 'center',
+        'color': colors['text']
+    }),
+
+    html.Div([
+        dcc.Dropdown(
+            id='ddl_x',
+            options=[{'label': i, 'value': i} for i in names],
+            value='sepal-width',
+            style={'width':'50%'}
+        )]),
+
+    html.Div([
+        dcc.Graph(id='graph1')
+    ],style={'width':'100%','display':'inline-block'})
+
+
+])
+
+
+
+if __name__ == '__main__':
+    app.run_server(port = 8000, debug = True)
+
